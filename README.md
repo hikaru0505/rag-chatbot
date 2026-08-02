@@ -10,20 +10,21 @@ The application supports **switchable retrieval methods**, transparent retrieval
 
 ## Chat Interface
 
-![Chat Interface](screenshots/01-chat-interface.png)
+![Chat Interface](screenshots/chat-interface.png)
 
 ---
 
 ## Retrieved Context
 
-![Retrieved Context](screenshots/02-retrieved-context.png)
+![Retrieved Context](screenshots/retrieved-context.png)
 
 ---
 
 ## RAG Pipeline
 
-![Pipeline](screenshots/03-rag-pipeline.png)
+![Pipeline](screenshots/rag-pipeline.png)
 
+---
 ---
 
 # ✨ Features
