@@ -1,115 +1,261 @@
-# RAG Chatbot (FAISS / TF-IDF + Groq Llama 3.1)
+# 📄 RAG Chatbot (FAISS / TF-IDF + Groq Llama 3.1)
 
-A Retrieval-Augmented Generation chatbot with a Streamlit web UI. Upload your
-own `.txt` / `.pdf` documents in-browser and ask questions about them. Supports
-two switchable retrieval methods (semantic FAISS embeddings or classic TF-IDF),
-shows exactly which chunks were retrieved and why, cites PDF page numbers, and
-includes a basic calculator tool plus pronoun-aware follow-up questions
-(e.g. "what does *he* do?").
+A Retrieval-Augmented Generation (RAG) chatbot built with **Streamlit**, **LangChain**, **FAISS**, **TF-IDF**, and **Groq Llama 3.1**. Upload your own **PDF** or **TXT** documents and ask natural language questions with page-cited answers.
 
-## Demo
+The application supports **switchable retrieval methods**, transparent retrieval visualization, configurable retrieval settings, document metadata, conversation export, and a built-in calculator tool.
 
-![RAG Chatbot Demo](demo.gif)
-<!-- Replace with an actual screenshot or GIF of the app before pushing -->
+---
 
-## Features
+# 📸 Screenshots
 
-- **Selectable retrieval:** FAISS + `all-MiniLM-L6-v2` sentence embeddings (semantic search) or TF-IDF cosine similarity (keyword search, fully explainable, no black-box embeddings)
-- **Transparent retrieval:** a "Retrieved Context" tab shows the exact chunks used to answer the last question, with relevance scores
-- **PDF page citations:** answers cite the source file *and* page number, not just the filename
-- **Document metadata:** file size and page count shown for each uploaded document
-- **Retrieval settings panel:** adjust chunk size, overlap, and top-K live from the sidebar
-- **Conversation export:** download the chat as a Markdown file
-- **Calculator tool:** simple arithmetic queries are routed to a calculator instead of retrieval
-- **Pipeline tab:** a diagram of the full RAG flow, for interview / demo purposes
+## Chat Interface
 
-## Folder structure
+![Chat Interface](screenshots/01-chat-interface.png)
 
-```
+---
+
+## Retrieved Context
+
+![Retrieved Context](screenshots/02-retrieved-context.png)
+
+---
+
+## RAG Pipeline
+
+![Pipeline](screenshots/03-rag-pipeline.png)
+
+---
+
+# ✨ Features
+
+- 🔍 **Dual Retrieval Methods**
+  - FAISS + all-MiniLM-L6-v2 embeddings (Semantic Search)
+  - TF-IDF + Cosine Similarity (Keyword Search)
+
+- 📄 Upload one or multiple PDF/TXT documents
+
+- 📑 Automatic PDF page-number citations
+
+- 🎯 Transparent retrieval showing
+  - Retrieved chunks
+  - Source document
+  - Page number
+  - Similarity score
+
+- ⚙️ Adjustable retrieval settings
+  - Retrieval method
+  - Chunk size
+  - Chunk overlap
+  - Top-K chunks
+
+- 💬 Pronoun-aware follow-up conversations using chat history
+
+- 📥 Download conversation as Markdown
+
+- 🧮 Built-in calculator tool for arithmetic queries
+
+- 📂 Document metadata
+  - File size
+  - Number of pages
+
+- 🧭 Interactive RAG Pipeline visualization
+
+---
+
+# 🛠 Tech Stack
+
+- Python
+- Streamlit
+- LangChain
+- Groq API
+- FAISS
+- Sentence Transformers
+- scikit-learn
+- PyPDF
+- python-dotenv
+
+---
+
+# 📂 Project Structure
+
+```text
 rag-chatbot/
-├── main.py             # Streamlit app (current version — FAISS/TF-IDF, citations, etc.)
+│
+├── main.py
 ├── requirements.txt
-├── .env                (you create this, not committed to git)
 ├── .env.example
-└── README.md
+├── README.md
+│
+└── screenshots/
+    ├── 01-chat-interface.png
+    ├── 02-retrieved-context.png
+    └── 03-rag-pipeline.png
 ```
 
-## Setup
+---
 
-1. Clone the repo and enter the project folder:
-   ```bash
-   git clone https://github.com/<your-username>/rag-chatbot.git
-   cd rag-chatbot
-   ```
+# ⚙️ Installation
 
-2. Create a virtual environment (recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate      # on Windows: venv\Scripts\activate
-   ```
+Clone the repository
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+git clone https://github.com/hikaru0505/rag-chatbot.git
+cd rag-chatbot
+```
 
-4. Get a free Groq API key from https://console.groq.com/keys
+Create a virtual environment
 
-5. Create a `.env` file (copy `.env.example`) and paste your key in:
-   ```
-   GROQ_API_KEY=your_actual_key_here
-   ```
+```bash
+python -m venv venv
+```
 
-## Running it
+Activate it
+
+Windows
+
+```bash
+venv\Scripts\activate
+```
+
+Linux/macOS
+
+```bash
+source venv/bin/activate
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Create a `.env` file
+
+```env
+GROQ_API_KEY=your_api_key_here
+```
+
+Run the application
 
 ```bash
 streamlit run main.py
 ```
 
-This opens a browser tab at `http://localhost:8501`. From there:
+---
 
-1. Upload one or more `.txt` / `.pdf` files in the sidebar.
-2. (Optional) Open **Retrieval settings** to pick FAISS vs. TF-IDF, or adjust chunk size / overlap / top-K.
-3. Click **Process documents** to index them.
-4. Ask questions in the **Chat** tab.
-5. Check the **Retrieved Context** tab to see exactly which chunks (and scores) were used.
-6. Try a math question like "calculate 12 * 8" to see the calculator tool trigger instead of document search.
+# 🚀 Usage
 
-> Note: the first FAISS query after startup will take a few seconds while the
-> `all-MiniLM-L6-v2` embedding model downloads and loads. Subsequent queries
-> are fast, and the model is cached for the rest of the session.
+1. Upload one or more PDF/TXT documents.
+2. Click **Process Documents**.
+3. Choose **FAISS** or **TF-IDF** retrieval.
+4. Configure chunk size, overlap, and Top-K if desired.
+5. Ask questions about your documents.
+6. View retrieved chunks in the **Retrieved Context** tab.
+7. Explore the retrieval workflow in the **Pipeline** tab.
+8. Download conversations as Markdown if needed.
 
-## Architecture
+---
 
-```
+# 🧠 Architecture
+
+```text
 USER Question
       │
-AGENT DECISION (calculator vs. document search)
+AGENT DECISION (Calculator vs Document Search)
       │
-      ├── Calculator ──► eval() ──► Result
+      ├──────────── Calculator
+      │               │
+      │             eval()
+      │               │
+      │            Calculation Result
       │
-      └── Document search
-              │
-              ▼
-      Retrieval  (FAISS embeddings  OR  TF-IDF cosine similarity)
-              │
-              ▼
-      Top-K relevant chunks (with source file + page number)
-              │
-              ▼
-      Groq Llama 3.1 (llama-3.1-8b-instant)
-              │
-              ▼
-           Answer + Source citation
-              │
-              ▼
-      Chat history (enables pronoun-aware follow-ups)
+      └──────────── Document Search
+                      │
+                      ▼
+      Retrieval (FAISS Embeddings / TF-IDF)
+                      │
+                      ▼
+      Top-K Relevant Chunks
+      (Source + Page Number + Score)
+                      │
+                      ▼
+      Groq Llama 3.1
+                      │
+                      ▼
+      Answer + Source Citation
+                      │
+                      ▼
+      Chat History
 ```
 
-## Design notes / things to mention in an interview
+---
 
-- **FAISS vs. TF-IDF:** FAISS embeddings capture semantic meaning (e.g. "car" and "automobile" are close in vector space); TF-IDF is pure keyword overlap but fully transparent and has no external model dependency. Making retrieval switchable lets you demonstrate you understand the tradeoff rather than just picking one.
-- **`eval()` in `calculate()`** is fine for a personal/local tool but unsafe for untrusted/public input. A production version would use a restricted math parser (e.g. Python's `ast` module with a whitelisted operator set) instead.
-- **Per-source deduplication:** retrieval keeps only the single best-scoring chunk per (source, page) pair before ranking, so one long document can't crowd out every other source in the answer.
-- **Page-level citation for PDFs** is done by chunking per-page rather than concatenating the whole PDF into one blob first — this is what makes accurate page citations possible.
-- **Session-scoped state:** documents, indexes, and chat history all live in `st.session_state`, so nothing persists to disk — re-running the app starts clean, matching how a stateless demo/portfolio app should behave.
+# 💡 Design Decisions
+
+### Why FAISS and TF-IDF?
+
+The application allows switching between semantic and keyword-based retrieval.
+
+**FAISS**
+
+- Semantic understanding
+- Finds conceptually similar text
+- Better for natural language questions
+
+**TF-IDF**
+
+- Pure keyword matching
+- Fully explainable
+- Lightweight
+- No embedding model required
+
+This comparison demonstrates understanding of different retrieval techniques instead of relying on a single approach.
+
+---
+
+### Transparent Retrieval
+
+Unlike many RAG demos, this application exposes:
+
+- Retrieved chunks
+- Source document
+- Page number
+- Similarity score
+
+making the retrieval process easy to inspect and debug.
+
+---
+
+### Page-Level Citations
+
+PDFs are processed page-by-page before chunking, allowing answers to reference the exact page instead of only the document name.
+
+---
+
+### Session-Based Storage
+
+Documents, indexes, and conversations are stored in `st.session_state`, keeping the application lightweight and stateless.
+
+---
+
+### Calculator Routing
+
+Simple arithmetic queries bypass document retrieval and are routed directly to a calculator, demonstrating basic tool routing within the application.
+
+---
+
+# 🚀 Future Improvements
+
+- Hybrid Retrieval (BM25 + FAISS)
+- OCR support for scanned PDFs
+- Additional LLM providers
+- Chat history persistence
+- Authentication and user accounts
+- Docker deployment
+- Cloud storage support
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
